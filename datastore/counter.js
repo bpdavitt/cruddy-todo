@@ -37,29 +37,30 @@ const writeCounter = (count, callback) => {
 // Public API - Fix this function //////////////////////////////////////////////
 
 exports.getNextUniqueId = () => {
-  let counter = 0;
+  let counter;
   // read
   readCounter((err, count) => {
     if (err) {
       console.log('Error');
     } else {
       counter = Number(count);
+      counter++;
+      
+      // write
+      writeCounter(counter, (error, string) => {
+        if (error) {
+          console.log('Error');
+        } else {
+          console.log(`${string} has been logged to counter file`);
+          console.log(JSON.stringify(string));
+          // return string;
+        }
+      });
+      // return 
     }
   });
   
   // increment
-  counter++;
-  
-  // write
-  writeCounter(counter, (err, string) => {
-    if (err) {
-      console.log('Error');
-    } else {
-      console.log(`${string} has been logged to counter file`);
-    }
-  });
-  // return 
-  return zeroPaddedNumber(counter);
 };
 
 
