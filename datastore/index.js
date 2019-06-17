@@ -15,8 +15,16 @@ exports.create = (text, callback) => {
       return;
     }
     id = string;
-    items[id] = text;
-    callback(null, { id, text });
+    let item = {id: text};
+    // when not testing path should be /data/${id}.txt
+    fs.writeFile(path.join(__dirname, `../test/testData/${id}.txt`), text, (err) => {
+      if (err) {
+        throw ('error writing new todo list item');
+      } else {
+        // callback(null, counterString);
+        callback(null, { id, text });
+      }
+    });
   });
 };
 
