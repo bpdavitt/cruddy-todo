@@ -36,7 +36,7 @@ const writeCounter = (count, callback) => {
 
 // Public API - Fix this function //////////////////////////////////////////////
 
-exports.getNextUniqueId = () => {
+exports.getNextUniqueId = (callback) => {
   let counter;
   // read
   readCounter((err, count) => {
@@ -51,9 +51,7 @@ exports.getNextUniqueId = () => {
         if (error) {
           console.log('Error');
         } else {
-          console.log(`${string} has been logged to counter file`);
-          console.log(JSON.stringify(string));
-          // return string;
+          callback(string);
         }
       });
       // return 
