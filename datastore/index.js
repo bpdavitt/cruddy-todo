@@ -11,7 +11,7 @@ exports.create = (text, callback) => {
   var id;
   counter.getNextUniqueId((err, string)=> {
     if (err) {
-      console.log("Sorry, you failed");
+      console.log('Sorry, you failed');
       return;
     }
     id = string;
@@ -29,10 +29,22 @@ exports.create = (text, callback) => {
 };
 
 exports.readAll = (callback) => {
-  var data = _.map(items, (text, id) => {
-    return { id, text };
+  // var data = _.map(items, (text, id) => {
+  //   return { id, text };
+  // });
+  new Promise((resolve, reject) => {
+    return fs.readdir(path.join(__dirname, `../test/testData`), (err, filenames) => {
+      if (err) {
+        reject(err);
+      } else {
+        for (let i = 0; i < filenames.length; i++) {
+          filenames[i] = filenames[i].substring(0, 5);
+        }
+        callback(null, filenames);
+        resolve(filenames);
+      }
+    });
   });
-  callback(null, data);
 };
 
 exports.readOne = (id, callback) => {
