@@ -9,7 +9,11 @@ var items = {};
 
 exports.create = (text, callback) => {
   var id;
-  counter.getNextUniqueId((string)=> {
+  counter.getNextUniqueId((err, string)=> {
+    if (err) {
+      console.log("Sorry, you failed");
+      return;
+    }
     id = string;
     items[id] = text;
     callback(null, { id, text });

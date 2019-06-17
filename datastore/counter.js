@@ -51,7 +51,7 @@ exports.getNextUniqueId = (callback) => {
         if (error) {
           console.log('Error');
         } else {
-          callback(string);
+          callback(null, string);
         }
       });
       // return 
