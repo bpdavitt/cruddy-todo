@@ -73,34 +73,32 @@ exports.readOne = (id, callback) => {
 };
 
 exports.update = (id, text, callback) => {
-  // var item = items[id];
-  // if (!item) {
-  //   callback(new Error(`No item with id: ${id}`));
-  // } else {
-  //   items[id] = text;
-  //   callback(null, { id, text });
-  // }
-
-  const testFolder = './tests/';
-  const fs = require('fs');
-  // plans for tomorrow
-  // fs.readdir(testFolder, (err, files) => {
-  //   files.forEach(file => {
-  //     console.log(file);
-  //   });
-  // });
-  
+  fs.readFile(path.join(exports.dataDir, `/${id}.txt`), 'utf-8', (err, oldText) => {
+    if (err) {
+      console.log('File not found while reading for update');
+      callback(err);
+    } else {
+      fs.writeFile(path.join(exports.dataDir, `/${id}.txt`), text, (err) => {
+        if (err) {
+          console.log('Error while updating');
+          callback(err);
+        } else {
+          callback(null, text);
+        }
+      });
+    }
+  });
 };
 
 exports.delete = (id, callback) => {
-  var item = items[id];
-  delete items[id];
-  if (!item) {
-    // report an error if item not found
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback();
-  }
+  fs.unlink(path.join(exports.dataDir, `/${id}.txt`), (err) => {
+    if (err) {
+      callback(err);
+    } else {
+      console.log('File deleted');
+      callback(null, 'File deleted');
+    }
+  });
 };
 
 // Config+Initialization code -- DO NOT MODIFY /////////////////////////////////
