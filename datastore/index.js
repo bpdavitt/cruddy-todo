@@ -17,7 +17,7 @@ exports.create = (text, callback) => {
     id = string;
     let item = {id: text};
     // when not testing path should be /data/${id}.txt
-    fs.writeFile(path.join(__dirname, `../test/testData/${id}.txt`), text, (err) => {
+    fs.writeFile(path.join(exports.dataDir, `/${id}.txt`), text, (err) => {
       if (err) {
         throw ('error writing new todo list item');
       } else {
@@ -33,7 +33,7 @@ exports.readAll = (callback) => {
   //   return { id, text };
   // });
   new Promise((resolve, reject) => {
-    return fs.readdir(path.join(__dirname, `../test/testData`), (err, filenames) => {
+    return fs.readdir(exports.dataDir, (err, filenames) => {
       if (err) {
         reject(err);
       } else {
@@ -48,12 +48,28 @@ exports.readAll = (callback) => {
 };
 
 exports.readOne = (id, callback) => {
-  var text = items[id];
-  if (!text) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback(null, { id, text });
-  }
+  // var text = items[id];
+  // if (!text) {
+  //   callback(new Error(`No item with id: ${id}`));
+  // } else {
+  //   callback(null, { id, text });
+  // }
+  new Promise((resolve, reject) => {
+    return fs.readFile(path.join(exports.dataDir, `/${id}.txt`), 'utf-8', (err, text) => {
+      if (err) {
+        console.log('Someone readOne wrong');
+        callback(err);
+        reject();
+      } else {
+        let result = {
+          'id': id,
+          'text': text
+        };
+        callback(null, result);
+        resolve(JSON.stringify(result));
+      }
+    });
+  });
 };
 
 exports.update = (id, text, callback) => {
