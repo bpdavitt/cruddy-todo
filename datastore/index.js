@@ -29,35 +29,39 @@ exports.create = (text, callback) => {
 };
 
 exports.readAll = (callback) => {
-  // var data = _.map(items, (text, id) => {
-  //   return { id, text };
-  // });
   new Promise((resolve, reject) => {
     return fs.readdir(exports.dataDir, (err, filenames) => {
       if (err) {
         reject(err);
       } else {
+        let result = [];
+        if(filenames.length === 0) {
+          callback(null, result);
+        }
         for (let i = 0; i < filenames.length; i++) {
           filenames[i] = filenames[i].substring(0, 5);
+          exports.readOne(filenames[i], (err, item) => {
+            if (err) {
+              console.log(`Error when reading file ${id} for readAll`);
+              callback(err);
+            } else {
+              result.push(item);
+              if(i === filenames.length - 1) {
+                callback(null, result);
+                resolve(result);
+              }
+            }
+          });
         }
-        callback(null, filenames);
-        resolve(filenames);
       }
     });
   });
 };
 
 exports.readOne = (id, callback) => {
-  // var text = items[id];
-  // if (!text) {
-  //   callback(new Error(`No item with id: ${id}`));
-  // } else {
-  //   callback(null, { id, text });
-  // }
   new Promise((resolve, reject) => {
     return fs.readFile(path.join(exports.dataDir, `/${id}.txt`), 'utf-8', (err, text) => {
       if (err) {
-        // console.log('Someone readOne wrong');
         callback(err);
         reject();
       } else {
