@@ -80,6 +80,15 @@ exports.update = (id, text, callback) => {
   //   items[id] = text;
   //   callback(null, { id, text });
   // }
+
+  const testFolder = './tests/';
+  const fs = require('fs');
+  // plans for tomorrow
+  // fs.readdir(testFolder, (err, files) => {
+  //   files.forEach(file => {
+  //     console.log(file);
+  //   });
+  // });
   
 };
 
