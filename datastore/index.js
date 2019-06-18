@@ -35,42 +35,46 @@ exports.readAll = (callback) => {
         reject(err);
       } else {
         let result = [];
-        if(filenames.length === 0) {
-          callback(null, result);
+        if (filenames.length === 0) {
+          return callback(null, result);
         }
+        // console.log(filenames)
         for (let i = 0; i < filenames.length; i++) {
           filenames[i] = filenames[i].substring(0, 5);
-          exports.readOne(filenames[i], (err, item) => {
+          result.push(exports.readOne(filenames[i], (err, item) => {
             if (err) {
               console.log(`Error when reading file ${id} for readAll`);
               callback(err);
             } else {
-              result.push(item);
-              if(i === filenames.length - 1) {
-                callback(null, result);
-                resolve(result);
-              }
+              resolve(item);
+              // console.log(result)
             }
-          });
+          }));
         }
+        console.log(result);
+        Promise.all(result)
+          .then(result => callback(null, result), err => callback(err))
+          .catch(() => {
+            console.log('Error when processing readAll');
+          });
       }
     });
   });
 };
 
 exports.readOne = (id, callback) => {
-  new Promise((resolve, reject) => {
-    return fs.readFile(path.join(exports.dataDir, `/${id}.txt`), 'utf-8', (err, text) => {
+  return new Promise((resolve, reject) => {
+    fs.readFile(path.join(exports.dataDir, `/${id}.txt`), 'utf-8', (err, text) => {
       if (err) {
         callback(err);
-        reject();
+        reject(err);
       } else {
         let result = {
-          'id': id,
-          'text': text
+          id: id,
+          text: text
         };
         callback(null, result);
-        resolve(JSON.stringify(result));
+        resolve(result);
       }
     });
   });
