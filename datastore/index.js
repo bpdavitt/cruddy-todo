@@ -57,7 +57,7 @@ exports.readOne = (id, callback) => {
   new Promise((resolve, reject) => {
     return fs.readFile(path.join(exports.dataDir, `/${id}.txt`), 'utf-8', (err, text) => {
       if (err) {
-        console.log('Someone readOne wrong');
+        // console.log('Someone readOne wrong');
         callback(err);
         reject();
       } else {
@@ -73,13 +73,14 @@ exports.readOne = (id, callback) => {
 };
 
 exports.update = (id, text, callback) => {
-  var item = items[id];
-  if (!item) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    items[id] = text;
-    callback(null, { id, text });
-  }
+  // var item = items[id];
+  // if (!item) {
+  //   callback(new Error(`No item with id: ${id}`));
+  // } else {
+  //   items[id] = text;
+  //   callback(null, { id, text });
+  // }
+  
 };
 
 exports.delete = (id, callback) => {
